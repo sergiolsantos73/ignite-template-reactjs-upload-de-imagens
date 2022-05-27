@@ -16,7 +16,6 @@ interface FormDataCreate {
   title: string;
   description: string;
 }
-const regexInputImageAcceptedFormats = /(?:([^:/?#]+):)?(?:([^/?#]*))?([^?#](?:jpeg|gif|png))(?:\?([^#]*))?(?:#(.*))?/g;
 
 export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
   const [imageUrl, setImageUrl] = useState('');
@@ -28,10 +27,10 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
       required: 'Imagem obrigatória',
       validate: {
         lessThan10MB: fileList =>
-          fileList[0].size <= 10000000 || 'O arquivo deve ser menor que 10 MB',
+          fileList[0].size <= 10485760 || 'O arquivo deve ser menor que 10 MB',
         acceptedFormats: fileList =>
-          regexInputImageAcceptedFormats.test(fileList[0].type) ||
-          'Somente arquivos PNG, JPEG e GIF',
+        /[/.](gif|jpg|jpeg|tiff|png)$/i.test(fileList[0].type) ||
+        'Somente arquivos PNG, JPEG e GIF'
       }
     },
     title: {
